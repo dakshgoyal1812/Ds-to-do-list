@@ -1,0 +1,1208 @@
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Syllabus To-Do & Study Tracker</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar & Smooth Transitions */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.1);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+        .checkbox-anim {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .checkbox-anim:active {
+            transform: scale(0.9);
+        }
+        @keyframes pulse-Subtle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .animate-pulse-subtle {
+            animation: pulse-Subtle 2.5s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-sans min-h-screen transition-colors duration-200 selection:bg-indigo-500 selection:text-white">
+
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-30 backdrop-blur-md bg-white/85 dark:bg-slate-900/85 border-b border-slate-200 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
+            <!-- Brand Title -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-lg sm:text-xl font-bold tracking-tight bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                            DSA Syllabus Tracker
+                        </h1>
+                        <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-xs font-mono font-medium bg-indigo-100 text-indigo-700 dark:bg-indigo-950/80 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            5 Units • 40 Lectures
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Data Structures & Algorithms in C — Complete Topic Checklist</p>
+                </div>
+            </div>
+
+            <!-- Right Action Controls -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Built-in Pomodoro Mini Timer -->
+                <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-700/80 rounded-xl px-2.5 py-1.5 text-xs font-mono">
+                    <i data-lucide="timer" class="w-4 h-4 text-indigo-500"></i>
+                    <span id="timerDisplay" class="font-semibold text-sm w-12 text-center">25:00</span>
+                    <button id="timerToggleBtn" onclick="toggleTimer()" title="Start/Pause 25m Study Timer" class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">
+                        <i data-lucide="play" id="timerIcon" class="w-3.5 h-3.5"></i>
+                    </button>
+                    <button onclick="resetTimer()" title="Reset Timer" class="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+
+                <!-- Add Custom Topic Button -->
+                <button onclick="openAddTopicModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm shadow-indigo-500/20 transition">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Add Topic</span>
+                </button>
+
+                <!-- Export Progress Button -->
+                <button onclick="copySummaryToClipboard()" title="Copy Progress Report" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">
+                    <i data-lucide="share-2" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Reset Button -->
+                <button onclick="openResetModal()" title="Reset All Progress" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-rose-100 dark:hover:bg-rose-950/50 text-slate-700 dark:text-slate-300 hover:text-rose-600 dark:hover:text-rose-400 border border-slate-200 dark:border-slate-700 transition">
+                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                </button>
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" title="Toggle Light/Dark Mode" class="p-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition">
+                    <i data-lucide="sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                    <i data-lucide="moon" class="w-4 h-4 block dark:hidden text-slate-700"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Overall Progress & Unit Stats Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <!-- Master Progress Card -->
+            <div class="lg:col-span-5 bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Overall Syllabus Mastery</span>
+                        <span id="overallFraction" class="text-xs font-mono font-semibold px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">0 / 50 Topics</span>
+                    </div>
+                    <div class="flex items-baseline gap-3 my-1">
+                        <h2 id="overallPercent" class="text-4xl font-extrabold tracking-tight">0%</h2>
+                        <span id="motivationalBadge" class="text-xs font-medium text-emerald-600 dark:text-emerald-400">Let's start conquering DSA!</span>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="w-full h-3 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden my-3 p-0.5">
+                        <div id="overallProgressBar" class="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Mini Stat Pills -->
+                <div class="grid grid-cols-3 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-center">
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2">
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Completed</p>
+                        <p id="statCompleted" class="text-base font-bold text-emerald-600 dark:text-emerald-400 font-mono">0</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2">
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">Remaining</p>
+                        <p id="statRemaining" class="text-base font-bold text-amber-600 dark:text-amber-400 font-mono">0</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2">
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400">For Revision</p>
+                        <p id="statStarred" class="text-base font-bold text-rose-600 dark:text-rose-400 font-mono">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Per-Unit Breakdown Cards -->
+            <div id="unitSummaryCards" class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-5 gap-3">
+                <!-- Dynamically populated by JS -->
+            </div>
+        </section>
+
+        <!-- Search, Filter & View Controls Bar -->
+        <section class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
+            <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+                <!-- Search Input -->
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+                    <input
+                        id="searchInput"
+                        type="text"
+                        oninput="handleSearch(this.value)"
+                        placeholder="Search any topic (e.g., Sparse Matrix, Postfix, Quick Sort, AVL, Dijkstra)..."
+                        class="w-full pl-10 pr-9 py-2.5 bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/80 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                    />
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- Status Filter Buttons -->
+                <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl overflow-x-auto">
+                    <button onclick="setStatusFilter('all')" id="filter-status-all" class="status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm">
+                        All Topics
+                    </button>
+                    <button onclick="setStatusFilter('pending')" id="filter-status-pending" class="status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                        Pending
+                    </button>
+                    <button onclick="setStatusFilter('completed')" id="filter-status-completed" class="status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                        Completed
+                    </button>
+                    <button onclick="setStatusFilter('starred')" id="filter-status-starred" class="status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1">
+                        <i data-lucide="star" class="w-3.5 h-3.5 text-amber-500 fill-amber-500"></i> Revision
+                    </button>
+                </div>
+            </div>
+
+            <!-- Unit Filter Tabs & Expand/Collapse Controls -->
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="unitFilterTabs">
+                    <!-- Dynamically populated -->
+                </div>
+
+                <div class="flex items-center gap-2 ml-auto">
+                    <button onclick="toggleAllFormulas()" id="toggleHintsBtn" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800/60 hover:bg-indigo-100 transition">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5"></i>
+                        <span id="toggleHintsText">Show Study Hints</span>
+                    </button>
+                    <button onclick="expandCollapseAll(true)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        Expand All
+                    </button>
+                    <button onclick="expandCollapseAll(false)" class="px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                        Collapse All
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Syllabus Units To-Do List Container -->
+        <section id="syllabusContainer" class="space-y-6 pb-12">
+            <!-- Populated by JavaScript -->
+        </section>
+
+    </main>
+
+    <!-- Add Custom Topic Modal -->
+    <div id="addTopicModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-xl space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold">Add Custom Syllabus Topic</h3>
+                <button onclick="closeAddTopicModal()" class="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">Select Unit</label>
+                    <select id="customUnitSelect" onchange="updateSectionDropdown()" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="unit-1">Unit I: Introduction, Arrays & Linked Lists</option>
+                        <option value="unit-2">Unit II: Stacks & Queues</option>
+                        <option value="unit-3">Unit III: Searching & Sorting</option>
+                        <option value="unit-4">Unit IV: Trees</option>
+                        <option value="unit-5">Unit V: Graphs</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">Select Category</label>
+                    <select id="customSectionSelect" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">Topic Title</label>
+                    <input id="customTopicTitle" type="text" placeholder="e.g., Practice C Program for Polynomial Addition" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">Study Hint / Key Formula (Optional)</label>
+                    <input id="customTopicHint" type="text" placeholder="e.g., Lab assignment or key complexity note" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeAddTopicModal()" class="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200">Cancel</button>
+                <button onclick="saveCustomTopic()" class="px-4 py-2 rounded-xl text-sm font-medium bg-indigo-600 hover:bg-indigo-500 text-white">Add Topic</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Confirmation Modal -->
+    <div id="resetModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-xl space-y-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/70 text-rose-600 dark:text-rose-400 flex items-center justify-center">
+                <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold">Reset All Progress?</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                    This will uncheck all completed topics, clear revision stars, and remove personal notes. This action cannot be undone.
+                </p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-sm font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200">Cancel</button>
+                <button onclick="confirmResetAll()" class="px-4 py-2 rounded-xl text-sm font-medium bg-rose-600 hover:bg-rose-500 text-white">Yes, Reset Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 hidden items-center gap-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-4 py-3 rounded-xl shadow-lg text-sm font-medium transition-all">
+        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 dark:text-emerald-600"></i>
+        <span id="toastMsg">Saved!</span>
+    </div>
+
+    <script>
+        // ==========================================
+        // COMPLETE SYLLABUS DATA (FROM UPLOADED IMAGE)
+        // ==========================================
+        const DEFAULT_SYLLABUS = [
+            {
+                id: "unit-1",
+                unitNumber: "Unit I",
+                title: "Introduction, Arrays & Linked Lists",
+                lectures: 8,
+                color: "indigo",
+                collapsed: false,
+                sections: [
+                    {
+                        id: "u1-intro",
+                        name: "Introduction",
+                        icon: "cpu",
+                        topics: [
+                            { id: "u1-t1", title: "Basic Terminology & Elementary Data Organization", hint: "Data, Entity, Field, Record, File, and hierarchy of data organization." },
+                            { id: "u1-t2", title: "Built-in Data Types in C", hint: "int, char, float, double, void, pointers, and memory sizes." },
+                            { id: "u1-t3", title: "Algorithm & Efficiency of an Algorithm", hint: "Finiteness, Definiteness, Input, Output, Effectiveness & a priori vs a posteriori analysis." },
+                            { id: "u1-t4", title: "Time and Space Complexity", hint: "Step count method, frequency count, fixed space + variable space requirements." },
+                            { id: "u1-t5", title: "Asymptotic Notations: Big Oh (O), Big Theta (Θ), and Big Omega (Ω)", hint: "O = Upper bound (worst case), Ω = Lower bound (best case), Θ = Tight bound (average/exact)." },
+                            { id: "u1-t6", title: "Time-Space Trade-off", hint: "Balancing memory usage (lookup tables/hashing) vs execution speed (recomputation)." },
+                            { id: "u1-t7", title: "Abstract Data Types (ADT)", hint: "Mathematical model of data objects + set of operations independent of implementation." }
+                        ]
+                    },
+                    {
+                        id: "u1-arrays",
+                        name: "Arrays",
+                        icon: "grid",
+                        topics: [
+                            { id: "u1-t8", title: "Definition, Single and Multidimensional Arrays", hint: "Homogeneous contiguous memory allocation; 1D, 2D (matrix), and multi-D structures." },
+                            { id: "u1-t9", title: "Representation of Arrays: Row Major Order & Column Major Order", hint: "Row Major stores row-by-row (used in C); Column Major stores column-by-column (Fortran/MATLAB)." },
+                            { id: "u1-t10", title: "Derivation of Index Formulae for 1-D, 2-D, 3-D and n-D Arrays", hint: "2D Row Major: Loc(A[i][j]) = Base + w * [(i - Lr)*N + (j - Lc)]; Col Major: Base + w * [(j - Lc)*M + (i - Lr)]." },
+                            { id: "u1-t11", title: "Application of Arrays", hint: "Matrix operations, lookup tables, implementing static stacks, queues, and heaps." },
+                            { id: "u1-t12", title: "Sparse Matrices and their Representations", hint: "Matrices with mostly zero elements; represented via 3-Tuple (Row, Col, Value) array or Cross Linked List." }
+                        ]
+                    },
+                    {
+                        id: "u1-linkedlist",
+                        name: "Linked Lists",
+                        icon: "git-commit",
+                        topics: [
+                            { id: "u1-t13", title: "Array Implementation & Pointer Implementation of Singly Linked Lists", hint: "Cursor-based static array pool vs dynamic struct Node { int data; struct Node* next; } using malloc()." },
+                            { id: "u1-t14", title: "Doubly Linked List (DLL)", hint: "Nodes contain *prev, data, *next allowing bidirectional O(1) known-node deletion." },
+                            { id: "u1-t15", title: "Circularly Linked List (CLL)", hint: "Last node points back to head instead of NULL; ideal for round-robin scheduling." },
+                            { id: "u1-t16", title: "Operations on a Linked List: Insertion, Deletion, Traversal", hint: "Insert/Delete at Beginning O(1), End O(n), or Given Position/Key; pointer manipulation care." },
+                            { id: "u1-t17", title: "Polynomial Representation using Linked List", hint: "Each node stores (Coefficient, Exponent, *next) ordered by decreasing degree." },
+                            { id: "u1-t18", title: "Addition, Subtraction & Multiplication of Single Variable & Two Variables Polynomials", hint: "Compare exponents to merge like terms; two-variable nodes store (Coeff, Exp_X, Exp_Y, *next)." }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "unit-2",
+                unitNumber: "Unit II",
+                title: "Stacks, Recursion & Queues",
+                lectures: 8,
+                color: "purple",
+                collapsed: false,
+                sections: [
+                    {
+                        id: "u2-stacks",
+                        name: "Stacks & Recursion",
+                        icon: "layers",
+                        topics: [
+                            { id: "u2-t1", title: "Stack Abstract Data Type & Primitive Operations: Push & Pop", hint: "LIFO (Last-In First-Out); check Overflow on Push (top == MAX-1) and Underflow on Pop (top == -1)." },
+                            { id: "u2-t2", title: "Array and Linked Implementation of Stack in C", hint: "Static array with top index vs Dynamic singly linked list pushing/popping at head in O(1)." },
+                            { id: "u2-t3", title: "Application of Stack: Prefix and Postfix Expressions", hint: "Infix to Postfix (Reverse Polish) & Prefix (Polish) conversion using operator precedence & associativity." },
+                            { id: "u2-t4", title: "Evaluation of Postfix Expression", hint: "Scan left-to-right: push operands, on operator pop top two operands (B then A), compute A op B, push result." },
+                            { id: "u2-t5", title: "Iteration and Recursion: Principles of Recursion, Tail Recursion, Removal of Recursion", hint: "Base case + Recursive step; Activation records on system call stack; Tail recursion optimization." },
+                            { id: "u2-t6", title: "Problem Solving using Iteration & Recursion: Binary Search, Fibonacci Numbers, Towers of Hanoi", hint: "Hanoi moves: 2^n - 1 (O(2^n)); Binary Search: O(log n); Fibonacci recursive O(2^n) vs iterative O(n)." },
+                            { id: "u2-t7", title: "Tradeoffs between Iteration and Recursion", hint: "Recursion offers clean code for tree/divide-and-conquer but adds stack memory & function call overhead." }
+                        ]
+                    },
+                    {
+                        id: "u2-queues",
+                        name: "Queues",
+                        icon: "arrow-right-left",
+                        topics: [
+                            { id: "u2-t8", title: "Operations on Queue: Create, Add (Enqueue), Delete (Dequeue), Full and Empty", hint: "FIFO (First-In First-Out); insertions at Rear, deletions at Front." },
+                            { id: "u2-t9", title: "Circular Queues", hint: "Overcomes wasted space in linear array queue using modulo arithmetic: rear = (rear + 1) % MAX." },
+                            { id: "u2-t10", title: "Array and Linked Implementation of Queues in C", hint: "Maintaining front & rear pointers/indices; handling single-element dequeue edge case." },
+                            { id: "u2-t11", title: "Dequeue (Double-Ended Queue) and Priority Queue", hint: "Input-restricted vs Output-restricted Deque; Priority Queue processes highest-priority elements first." }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "unit-3",
+                unitNumber: "Unit III",
+                title: "Searching, Hashing & Sorting",
+                lectures: 8,
+                color: "amber",
+                collapsed: false,
+                sections: [
+                    {
+                        id: "u3-searching",
+                        name: "Searching & Hashing",
+                        icon: "search",
+                        topics: [
+                            { id: "u3-t1", title: "Concept of Searching & Sequential (Linear) Search", hint: "Unsorted/sorted scan: Best O(1), Worst/Avg O(n)." },
+                            { id: "u3-t2", title: "Index Sequential Search", hint: "Uses an auxiliary index table on sorted data to jump blocks, reducing search time to O(√n)." },
+                            { id: "u3-t3", title: "Binary Search", hint: "Requires sorted array; repeatedly halves search space: mid = low + (high-low)/2. Time: O(log n)." },
+                            { id: "u3-t4", title: "Concept of Hashing & Hash Functions", hint: "Division method (k mod m), Mid-square, Folding, Digit analysis for O(1) average lookup." },
+                            { id: "u3-t5", title: "Collision Resolution Techniques used in Hashing", hint: "Open Addressing (Linear Probing, Quadratic Probing, Double Hashing) & Separate Chaining." }
+                        ]
+                    },
+                    {
+                        id: "u3-sorting",
+                        name: "Sorting Algorithms",
+                        icon: "bar-chart-2",
+                        topics: [
+                            { id: "u3-t6", title: "Insertion Sort", hint: "Builds sorted prefix one item at a time. Best: O(n), Worst/Avg: O(n²), Stable, In-place." },
+                            { id: "u3-t7", title: "Selection Sort", hint: "Repeatedly selects minimum from unsorted region. Best/Avg/Worst: O(n²), minimum swaps O(n)." },
+                            { id: "u3-t8", title: "Bubble Sort", hint: "Adjacent swaps bubble largest to end. Best (with flag): O(n), Worst/Avg: O(n²), Stable." },
+                            { id: "u3-t9", title: "Quick Sort", hint: "Divide & Conquer using Partition around Pivot. Avg/Best: O(n log n), Worst: O(n²), In-place." },
+                            { id: "u3-t10", title: "Merge Sort", hint: "Divide array in halves & merge sorted halves. Best/Avg/Worst: O(n log n), Space: O(n), Stable." },
+                            { id: "u3-t11", title: "Heap Sort", hint: "Build Max-Heap O(n) + repeatedly extract max O(n log n). Time: O(n log n) always, In-place." },
+                            { id: "u3-t12", title: "Radix Sort", hint: "Non-comparison digit-by-digit sort (LSD to MSD) using Counting/Bucket sort. Time: O(d*(n + k))." }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "unit-4",
+                unitNumber: "Unit IV",
+                title: "Trees & Heaps",
+                lectures: 8,
+                color: "emerald",
+                collapsed: false,
+                sections: [
+                    {
+                        id: "u4-trees",
+                        name: "Trees, BST, AVL, B-Tree & Heaps",
+                        icon: "git-branch",
+                        topics: [
+                            { id: "u4-t1", title: "Basic Terminology used with Tree", hint: "Root, Node, Degree, Leaf, Internal Node, Depth, Height, Level, Sibling, Ancestor, Forest." },
+                            { id: "u4-t2", title: "Binary Trees & Representations: Array and Pointer (Linked List) Representation", hint: "Array index i (0-based): Left child = 2i+1, Right child = 2i+2, Parent = (i-1)/2." },
+                            { id: "u4-t3", title: "Binary Search Tree (BST) Concept", hint: "Left subtree keys < Root key < Right subtree keys; Inorder traversal yields sorted sequence." },
+                            { id: "u4-t4", title: "Strictly Binary Tree, Complete Binary Tree & Extended Binary Trees (2-Trees)", hint: "Strictly: 0 or 2 children. Extended: External nodes (E) = Internal nodes (I) + 1." },
+                            { id: "u4-t5", title: "Tree Traversal Algorithms: Inorder, Preorder and Postorder", hint: "Inorder (LNR), Preorder (NLR), Postorder (LRN) — both recursive & iterative stack approaches." },
+                            { id: "u4-t6", title: "Constructing Binary Tree from given Tree Traversal", hint: "Uniquely construct tree using Inorder + Preorder OR Inorder + Postorder." },
+                            { id: "u4-t7", title: "Operations of Insertion, Deletion, Searching & Modification of data in BST", hint: "Deletion cases: (1) Leaf node, (2) Node with 1 child, (3) Node with 2 children (replace with Inorder Successor/Predecessor)." },
+                            { id: "u4-t8", title: "Threaded Binary Trees & Traversing Threaded Binary Trees", hint: "Replaces NULL pointers with threads to Inorder Predecessor/Successor for stackless traversal." },
+                            { id: "u4-t9", title: "Huffman Coding using Binary Tree", hint: "Greedy variable-length prefix coding for lossless data compression using min-priority queue." },
+                            { id: "u4-t10", title: "Concept & Basic Operations for AVL Tree", hint: "Self-balancing BST with Balance Factor ∈ {-1, 0, +1}; Rotations: LL, RR, LR, RL." },
+                            { id: "u4-t11", title: "Concept & Basic Operations for B-Tree", hint: "Balanced multi-way search tree optimized for disk storage; order m node has [⌈m/2⌉, m] children." },
+                            { id: "u4-t12", title: "Concept & Basic Operations for Binary Heaps", hint: "Complete binary tree satisfying Min-Heap or Max-Heap property; Heapify up/down in O(log n)." }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "unit-5",
+                unitNumber: "Unit V",
+                title: "Graphs & Graph Algorithms",
+                lectures: 8,
+                color: "rose",
+                collapsed: false,
+                sections: [
+                    {
+                        id: "u5-graphs",
+                        name: "Graphs, Traversals, MST & Shortest Paths",
+                        icon: "share-2",
+                        topics: [
+                            { id: "u5-t1", title: "Terminology used with Graph", hint: "Vertex, Edge, Directed/Undirected, Weighted, Degree (In-degree/Out-degree), Path, Cycle, Simple Graph." },
+                            { id: "u5-t2", title: "Data Structures for Graph Representations: Adjacency Matrices, Adjacency List, Adjacency Multilist", hint: "Matrix: O(V²) space, O(1) edge check; List: O(V + E) space, ideal for sparse graphs." },
+                            { id: "u5-t3", title: "Graph Traversal: Depth First Search (DFS) & Breadth First Search (BFS)", hint: "BFS uses Queue (level-order, shortest unweighted path); DFS uses Stack/Recursion (backtracking, cycle detection). Time: O(V+E)." },
+                            { id: "u5-t4", title: "Connected Components & Spanning Trees", hint: "Spanning tree of connected graph has V vertices, V-1 edges, and no cycles." },
+                            { id: "u5-t5", title: "Minimum Cost Spanning Trees (MST): Prim's and Kruskal's Algorithm", hint: "Kruskal's grows forest by sorting edges (Disjoint Set); Prim's grows single tree from start vertex." },
+                            { id: "u5-t6", title: "Transitive Closure: Warshall's Algorithm", hint: "Dynamic programming O(V³) algorithm to find reachability matrix R^(k)[i][j] = R^(k-1)[i][j] OR (R^(k-1)[i][k] AND R^(k-1)[k][j])." },
+                            { id: "u5-t7", title: "Shortest Path Algorithm: Dijkstra's Algorithm & Floyd-Warshall", hint: "Dijkstra's finds Single-Source Shortest Path for non-negative edge weights using greedy relaxation." }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // APPLICATION STATE
+        // ==========================================
+        const STORAGE_KEY = 'dsa_syllabus_tracker_v1';
+        let syllabusData = [];
+        let userProgress = {
+            completed: {}, // topicId: boolean
+            starred: {},   // topicId: boolean
+            notes: {},     // topicId: string
+        };
+        let activeUnitFilter = 'all';
+        let activeStatusFilter = 'all';
+        let searchQuery = '';
+        let showAllHints = false;
+        let openNoteEditors = {}; // topicId: boolean
+
+        // Pomodoro Timer State
+        let timerSeconds = 25 * 60;
+        let timerInterval = null;
+        let timerRunning = false;
+
+        // ==========================================
+        // INITIALIZATION & STORAGE
+        // ==========================================
+        function loadState() {
+            try {
+                const savedRaw = localStorage.getItem(STORAGE_KEY);
+                if (savedRaw) {
+                    const parsed = JSON.parse(savedRaw);
+                    syllabusData = parsed.syllabusData || JSON.parse(JSON.stringify(DEFAULT_SYLLABUS));
+                    userProgress = parsed.userProgress || { completed: {}, starred: {}, notes: {} };
+                } else {
+                    syllabusData = JSON.parse(JSON.stringify(DEFAULT_SYLLABUS));
+                }
+            } catch (e) {
+                console.error("Failed to load state from localStorage:", e);
+                syllabusData = JSON.parse(JSON.stringify(DEFAULT_SYLLABUS));
+            }
+        }
+
+        function saveState() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify({
+                    syllabusData,
+                    userProgress
+                }));
+            } catch (e) {
+                console.error("Failed to save state:", e);
+            }
+        }
+
+        // ==========================================
+        // CORE UI RENDERING
+        // ==========================================
+        function renderApp() {
+            renderStatsAndUnitCards();
+            renderUnitFilterTabs();
+            renderSyllabusList();
+            lucide.createIcons();
+        }
+
+        function getUnitColorClasses(color) {
+            const map = {
+                indigo: {
+                    bg: "bg-indigo-500",
+                    lightBg: "bg-indigo-50 dark:bg-indigo-950/40",
+                    border: "border-indigo-200 dark:border-indigo-800/70",
+                    text: "text-indigo-600 dark:text-indigo-400",
+                    badge: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/60 dark:text-indigo-300"
+                },
+                purple: {
+                    bg: "bg-purple-500",
+                    lightBg: "bg-purple-50 dark:bg-purple-950/40",
+                    border: "border-purple-200 dark:border-purple-800/70",
+                    text: "text-purple-600 dark:text-purple-400",
+                    badge: "bg-purple-100 text-purple-700 dark:bg-purple-900/60 dark:text-purple-300"
+                },
+                amber: {
+                    bg: "bg-amber-500",
+                    lightBg: "bg-amber-50 dark:bg-amber-950/40",
+                    border: "border-amber-200 dark:border-amber-800/70",
+                    text: "text-amber-600 dark:text-amber-400",
+                    badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-300"
+                },
+                emerald: {
+                    bg: "bg-emerald-500",
+                    lightBg: "bg-emerald-50 dark:bg-emerald-950/40",
+                    border: "border-emerald-200 dark:border-emerald-800/70",
+                    text: "text-emerald-600 dark:text-emerald-400",
+                    badge: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/60 dark:text-emerald-300"
+                },
+                rose: {
+                    bg: "bg-rose-500",
+                    lightBg: "bg-rose-50 dark:bg-rose-950/40",
+                    border: "border-rose-200 dark:border-rose-800/70",
+                    text: "text-rose-600 dark:text-rose-400",
+                    badge: "bg-rose-100 text-rose-700 dark:bg-rose-900/60 dark:text-rose-300"
+                }
+            };
+            return map[color] || map.indigo;
+        }
+
+        function renderStatsAndUnitCards() {
+            let totalTopics = 0;
+            let totalCompleted = 0;
+            let totalStarred = 0;
+
+            const unitCardsHTML = syllabusData.map(unit => {
+                let uTotal = 0;
+                let uDone = 0;
+                unit.sections.forEach(sec => {
+                    sec.topics.forEach(t => {
+                        uTotal++;
+                        totalTopics++;
+                        if (userProgress.completed[t.id]) {
+                            uDone++;
+                            totalCompleted++;
+                        }
+                        if (userProgress.starred[t.id]) {
+                            totalStarred++;
+                        }
+                    });
+                });
+
+                const pct = uTotal > 0 ? Math.round((uDone / uTotal) * 100) : 0;
+                const colors = getUnitColorClasses(unit.color);
+                const isSelected = activeUnitFilter === unit.id;
+
+                return `
+                    <button onclick="setUnitFilter('${isSelected ? 'all' : unit.id}')" 
+                        class="text-left bg-white dark:bg-slate-900 rounded-2xl p-3.5 border ${isSelected ? 'ring-2 ring-indigo-500 border-transparent' : 'border-slate-200 dark:border-slate-800'} shadow-sm hover:border-indigo-400 dark:hover:border-indigo-600 transition flex flex-col justify-between group">
+                        <div>
+                            <div class="flex items-center justify-between gap-1 mb-1">
+                                <span class="text-xs font-bold ${colors.text}">${unit.unitNumber}</span>
+                                <span class="text-[10px] font-mono text-slate-400">${unit.lectures}L</span>
+                            </div>
+                            <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">
+                                ${unit.title}
+                            </p>
+                        </div>
+                        <div class="mt-3">
+                            <div class="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-1">
+                                <span>${uDone}/${uTotal}</span>
+                                <span class="font-semibold text-slate-700 dark:text-slate-200">${pct}%</span>
+                            </div>
+                            <div class="w-full h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full ${colors.bg} rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+                            </div>
+                        </div>
+                    </button>
+                `;
+            }).join('');
+
+            document.getElementById('unitSummaryCards').innerHTML = unitCardsHTML;
+
+            // Update Master Progress
+            const overallPct = totalTopics > 0 ? Math.round((totalCompleted / totalTopics) * 100) : 0;
+            document.getElementById('overallPercent').textContent = `${overallPct}%`;
+            document.getElementById('overallFraction').textContent = `${totalCompleted} / ${totalTopics} Topics`;
+            document.getElementById('overallProgressBar').style.width = `${overallPct}%`;
+            document.getElementById('statCompleted').textContent = totalCompleted;
+            document.getElementById('statRemaining').textContent = totalTopics - totalCompleted;
+            document.getElementById('statStarred').textContent = totalStarred;
+
+            const badge = document.getElementById('motivationalBadge');
+            if (overallPct === 0) badge.textContent = "Let's start conquering DSA!";
+            else if (overallPct < 25) badge.textContent = "Great start! Keep building momentum.";
+            else if (overallPct < 50) badge.textContent = "Solid progress! Almost halfway there.";
+            else if (overallPct < 80) badge.textContent = "Over halfway! You're mastering Data Structures.";
+            else if (overallPct < 100) badge.textContent = "Final stretch! Exam ready soon.";
+            else badge.textContent = "🎉 100% Syllabus Completed! Outstanding work!";
+        }
+
+        function renderUnitFilterTabs() {
+            const container = document.getElementById('unitFilterTabs');
+            const tabs = [
+                { id: 'all', label: 'All Units (I - V)' },
+                ...syllabusData.map(u => ({ id: u.id, label: `${u.unitNumber}` }))
+            ];
+
+            container.innerHTML = tabs.map(t => {
+                const active = activeUnitFilter === t.id;
+                return `
+                    <button onclick="setUnitFilter('${t.id}')" 
+                        class="px-3 py-1.5 rounded-xl text-xs font-semibold transition whitespace-nowrap ${
+                            active 
+                            ? 'bg-indigo-600 text-white shadow-sm shadow-indigo-500/20' 
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700'
+                        }">
+                        ${t.label}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function topicMatchesFilters(topic) {
+            const isCompleted = !!userProgress.completed[topic.id];
+            const isStarred = !!userProgress.starred[topic.id];
+
+            if (activeStatusFilter === 'completed' && !isCompleted) return false;
+            if (activeStatusFilter === 'pending' && isCompleted) return false;
+            if (activeStatusFilter === 'starred' && !isStarred) return false;
+
+            if (searchQuery.trim() !== '') {
+                const q = searchQuery.toLowerCase();
+                const inTitle = topic.title.toLowerCase().includes(q);
+                const inHint = (topic.hint || '').toLowerCase().includes(q);
+                const inNote = (userProgress.notes[topic.id] || '').toLowerCase().includes(q);
+                return inTitle || inHint || inNote;
+            }
+
+            return true;
+        }
+
+        function renderSyllabusList() {
+            const container = document.getElementById('syllabusContainer');
+            let renderedUnits = 0;
+
+            const html = syllabusData.map(unit => {
+                if (activeUnitFilter !== 'all' && activeUnitFilter !== unit.id) return '';
+
+                // Filter sections & topics
+                const filteredSections = unit.sections.map(sec => {
+                    const visibleTopics = sec.topics.filter(topicMatchesFilters);
+                    return { ...sec, visibleTopics };
+                }).filter(sec => sec.visibleTopics.length > 0);
+
+                if (filteredSections.length === 0) return '';
+                renderedUnits++;
+
+                // Calculate total unit stats
+                let unitTotal = 0;
+                let unitDone = 0;
+                unit.sections.forEach(s => s.topics.forEach(t => {
+                    unitTotal++;
+                    if (userProgress.completed[t.id]) unitDone++;
+                }));
+                const unitPct = unitTotal > 0 ? Math.round((unitDone / unitTotal) * 100) : 0;
+                const colors = getUnitColorClasses(unit.color);
+
+                return `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden transition">
+                        <!-- Unit Header -->
+                        <div class="p-4 sm:p-5 ${colors.lightBg} border-b border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
+                            <div class="flex items-center gap-3 cursor-pointer select-none" onclick="toggleUnitCollapse('${unit.id}')">
+                                <span class="px-3 py-1 rounded-xl text-xs font-extrabold uppercase tracking-wider ${colors.badge}">
+                                    ${unit.unitNumber}
+                                </span>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                                        ${unit.title}
+                                    </h3>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                                        Proposed Lectures: <span class="font-mono font-semibold">${String(unit.lectures).padStart(2, '0')}</span> • ${unitDone} of ${unitTotal} topics completed (${unitPct}%)
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 ml-auto">
+                                <button onclick="markUnitComplete('${unit.id}', ${unitDone < unitTotal})" 
+                                    class="px-3 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition shadow-sm">
+                                    ${unitDone < unitTotal ? 'Check All in Unit' : 'Uncheck Unit'}
+                                </button>
+                                <button onclick="toggleUnitCollapse('${unit.id}')" class="p-2 rounded-xl bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700 transition">
+                                    <i data-lucide="${unit.collapsed ? 'chevron-down' : 'chevron-up'}" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sections & Topics Body -->
+                        <div class="${unit.collapsed ? 'hidden' : 'block'} divide-y divide-slate-100 dark:divide-slate-800/80">
+                            ${filteredSections.map(sec => {
+                                const secTotal = sec.topics.length;
+                                const secDone = sec.topics.filter(t => userProgress.completed[t.id]).length;
+                                return `
+                                    <div class="p-4 sm:p-5 space-y-3">
+                                        <!-- Sub-Section Header -->
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-2">
+                                                <i data-lucide="${sec.icon || 'book-open'}" class="w-4 h-4 ${colors.text}"></i>
+                                                <h4 class="text-xs sm:text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">
+                                                    ${sec.name}
+                                                </h4>
+                                                <span class="text-xs font-mono text-slate-400">(${secDone}/${secTotal})</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Topic Checklist Items -->
+                                        <div class="space-y-2">
+                                            ${sec.visibleTopics.map(topic => renderTopicRow(topic, colors)).join('')}
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (renderedUnits === 0) {
+                container.innerHTML = `
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-12 text-center space-y-3">
+                        <div class="w-12 h-12 rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center mx-auto">
+                            <i data-lucide="search-x" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-base font-bold">No matching syllabus topics found</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+                            Try clearing your search filter or switching between "All Topics", "Pending", and "Revision".
+                        </p>
+                        <button onclick="resetFilters()" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-500 transition">
+                            Reset Filters
+                        </button>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = html;
+            }
+        }
+
+        function renderTopicRow(topic, colors) {
+            const isDone = !!userProgress.completed[topic.id];
+            const isStarred = !!userProgress.starred[topic.id];
+            const noteText = userProgress.notes[topic.id] || '';
+            const isNoteOpen = !!openNoteEditors[topic.id];
+
+            return `
+                <div class="group rounded-xl border ${
+                    isDone 
+                    ? 'bg-emerald-50/40 dark:bg-emerald-950/15 border-emerald-200/70 dark:border-emerald-900/40' 
+                    : 'bg-slate-50/70 dark:bg-slate-800/40 border-slate-200/80 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-indigo-700'
+                } p-3 sm:p-3.5 transition-all">
+                    <div class="flex items-start gap-3">
+                        <!-- Custom Checkbox -->
+                        <button onclick="toggleTopicComplete('${topic.id}')" 
+                            aria-label="Toggle topic completion"
+                            class="checkbox-anim mt-0.5 w-5 h-5 rounded-lg flex items-center justify-center flex-shrink-0 border transition ${
+                                isDone 
+                                ? 'bg-emerald-500 border-emerald-500 text-white shadow-sm shadow-emerald-500/30' 
+                                : 'bg-white dark:bg-slate-900 border-slate-300 dark:border-slate-600 hover:border-indigo-500'
+                            }">
+                            ${isDone ? '<i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>' : ''}
+                        </button>
+
+                        <!-- Topic Content -->
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-start justify-between gap-2">
+                                <span onclick="toggleTopicComplete('${topic.id}')" 
+                                    class="cursor-pointer text-sm font-medium leading-snug select-none transition ${
+                                        isDone 
+                                        ? 'line-through text-slate-400 dark:text-slate-500' 
+                                        : 'text-slate-800 dark:text-slate-100'
+                                    }">
+                                    ${topic.title}
+                                </span>
+
+                                <!-- Right Topic Actions -->
+                                <div class="flex items-center gap-1 flex-shrink-0">
+                                    <!-- Star for Revision Button -->
+                                    <button onclick="toggleTopicStar('${topic.id}')" 
+                                        title="Mark for Revision / Important"
+                                        class="p-1.5 rounded-lg transition ${
+                                            isStarred 
+                                            ? 'text-amber-500 bg-amber-50 dark:bg-amber-950/50' 
+                                            : 'text-slate-400 hover:text-amber-500 hover:bg-slate-200/60 dark:hover:bg-slate-700/60'
+                                        }">
+                                        <i data-lucide="star" class="w-3.5 h-3.5 ${isStarred ? 'fill-amber-500' : ''}"></i>
+                                    </button>
+
+                                    <!-- Personal Note Button -->
+                                    <button onclick="toggleNoteEditor('${topic.id}')" 
+                                        title="Add/Edit Personal Study Note"
+                                        class="p-1.5 rounded-lg transition ${
+                                            noteText 
+                                            ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/60' 
+                                            : 'text-slate-400 hover:text-indigo-500 hover:bg-slate-200/60 dark:hover:bg-slate-700/60'
+                                        }">
+                                        <i data-lucide="file-text" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quick Study Hint (Collapsible) -->
+                            ${topic.hint ? `
+                                <div class="${showAllHints ? 'block' : 'hidden group-hover:block'} mt-1.5 text-xs text-slate-500 dark:text-slate-400 bg-white/80 dark:bg-slate-900/70 px-2.5 py-1.5 rounded-lg border border-slate-200/60 dark:border-slate-800">
+                                    <span class="font-semibold text-indigo-600 dark:text-indigo-400">Key Concept:</span> ${topic.hint}
+                                </div>
+                            ` : ''}
+
+                            <!-- Saved Note Display -->
+                            ${noteText && !isNoteOpen ? `
+                                <div onclick="toggleNoteEditor('${topic.id}')" class="cursor-pointer mt-2 text-xs bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/70 dark:border-amber-800/50 text-amber-900 dark:text-amber-200 px-3 py-2 rounded-lg flex items-start gap-2">
+                                    <i data-lucide="sticky-note" class="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-amber-500"></i>
+                                    <div class="whitespace-pre-wrap flex-1">${escapeHtml(noteText)}</div>
+                                </div>
+                            ` : ''}
+
+                            <!-- Note Editor Box -->
+                            ${isNoteOpen ? `
+                                <div class="mt-2.5 space-y-2 bg-white dark:bg-slate-900 p-2.5 rounded-xl border border-indigo-200 dark:border-indigo-800">
+                                    <textarea id="note-input-${topic.id}" rows="2" 
+                                        placeholder="Write formulas, C struct definitions, or lecture notes for this topic..."
+                                        class="w-full text-xs p-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">${escapeHtml(noteText)}</textarea>
+                                    <div class="flex justify-end gap-2">
+                                        <button onclick="toggleNoteEditor('${topic.id}')" class="px-2.5 py-1 rounded-lg text-xs text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800">Cancel</button>
+                                        <button onclick="saveTopicNote('${topic.id}')" class="px-3 py-1 rounded-lg text-xs font-medium bg-indigo-600 text-white hover:bg-indigo-500">Save Note</button>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // INTERACTION HANDLERS
+        // ==========================================
+        function toggleTopicComplete(topicId) {
+            userProgress.completed[topicId] = !userProgress.completed[topicId];
+            saveState();
+            renderApp();
+        }
+
+        function toggleTopicStar(topicId) {
+            userProgress.starred[topicId] = !userProgress.starred[topicId];
+            saveState();
+            renderApp();
+        }
+
+        function toggleNoteEditor(topicId) {
+            openNoteEditors[topicId] = !openNoteEditors[topicId];
+            renderApp();
+        }
+
+        function saveTopicNote(topicId) {
+            const input = document.getElementById(`note-input-${topicId}`);
+            if (input) {
+                const val = input.value.trim();
+                if (val) {
+                    userProgress.notes[topicId] = val;
+                } else {
+                    delete userProgress.notes[topicId];
+                }
+                openNoteEditors[topicId] = false;
+                saveState();
+                renderApp();
+                showToast("Study note saved!");
+            }
+        }
+
+        function markUnitComplete(unitId, markAsDone) {
+            const unit = syllabusData.find(u => u.id === unitId);
+            if (!unit) return;
+            unit.sections.forEach(sec => {
+                sec.topics.forEach(t => {
+                    userProgress.completed[t.id] = markAsDone;
+                });
+            });
+            saveState();
+            renderApp();
+            showToast(markAsDone ? `${unit.unitNumber} marked complete!` : `${unit.unitNumber} unchecked.`);
+        }
+
+        function toggleUnitCollapse(unitId) {
+            const unit = syllabusData.find(u => u.id === unitId);
+            if (unit) {
+                unit.collapsed = !unit.collapsed;
+                saveState();
+                renderApp();
+            }
+        }
+
+        function expandCollapseAll(expand) {
+            syllabusData.forEach(u => u.collapsed = !expand);
+            saveState();
+            renderApp();
+        }
+
+        function toggleAllFormulas() {
+            showAllHints = !showAllHints;
+            document.getElementById('toggleHintsText').textContent = showAllHints ? 'Hide Study Hints' : 'Show Study Hints';
+            renderApp();
+        }
+
+        function setUnitFilter(unitId) {
+            activeUnitFilter = unitId;
+            renderApp();
+        }
+
+        function setStatusFilter(status) {
+            activeStatusFilter = status;
+            document.querySelectorAll('.status-tab').forEach(btn => {
+                btn.className = "status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white flex items-center gap-1";
+            });
+            const activeBtn = document.getElementById(`filter-status-${status}`);
+            if (activeBtn) {
+                activeBtn.className = "status-tab px-3 py-1.5 rounded-lg text-xs font-medium transition whitespace-nowrap bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm flex items-center gap-1";
+            }
+            renderApp();
+        }
+
+        function handleSearch(val) {
+            searchQuery = val;
+            const clearBtn = document.getElementById('clearSearchBtn');
+            if (val.trim().length > 0) {
+                clearBtn.classList.remove('hidden');
+            } else {
+                clearBtn.classList.add('hidden');
+            }
+            renderSyllabusList();
+            lucide.createIcons();
+        }
+
+        function clearSearch() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            handleSearch('');
+        }
+
+        function resetFilters() {
+            activeUnitFilter = 'all';
+            setStatusFilter('all');
+            clearSearch();
+            renderApp();
+        }
+
+        // ==========================================
+        // ADD CUSTOM TOPIC MODAL
+        // ==========================================
+        function openAddTopicModal() {
+            updateSectionDropdown();
+            document.getElementById('addTopicModal').classList.remove('hidden');
+            document.getElementById('addTopicModal').classList.add('flex');
+            document.getElementById('customTopicTitle').focus();
+        }
+
+        function closeAddTopicModal() {
+            document.getElementById('addTopicModal').classList.add('hidden');
+            document.getElementById('addTopicModal').classList.remove('flex');
+            document.getElementById('customTopicTitle').value = '';
+            document.getElementById('customTopicHint').value = '';
+        }
+
+        function updateSectionDropdown() {
+            const unitId = document.getElementById('customUnitSelect').value;
+            const unit = syllabusData.find(u => u.id === unitId);
+            const secSelect = document.getElementById('customSectionSelect');
+            if (!unit) return;
+            secSelect.innerHTML = unit.sections.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+        }
+
+        function saveCustomTopic() {
+            const unitId = document.getElementById('customUnitSelect').value;
+            const secId = document.getElementById('customSectionSelect').value;
+            const title = document.getElementById('customTopicTitle').value.trim();
+            const hint = document.getElementById('customTopicHint').value.trim();
+
+            if (!title) {
+                showToast("Please enter a topic title!");
+                return;
+            }
+
+            const unit = syllabusData.find(u => u.id === unitId);
+            if (unit) {
+                const sec = unit.sections.find(s => s.id === secId);
+                if (sec) {
+                    const newId = 'custom-' + Date.now();
+                    sec.topics.push({
+                        id: newId,
+                        title: title,
+                        hint: hint || 'Custom study topic added by user.'
+                    });
+                    saveState();
+                    renderApp();
+                    closeAddTopicModal();
+                    showToast("Custom topic added to " + unit.unitNumber);
+                }
+            }
+        }
+
+        // ==========================================
+        // RESET & EXPORT PROGRESS
+        // ==========================================
+        function openResetModal() {
+            document.getElementById('resetModal').classList.remove('hidden');
+            document.getElementById('resetModal').classList.add('flex');
+        }
+
+        function closeResetModal() {
+            document.getElementById('resetModal').classList.add('hidden');
+            document.getElementById('resetModal').classList.remove('flex');
+        }
+
+        function confirmResetAll() {
+            syllabusData = JSON.parse(JSON.stringify(DEFAULT_SYLLABUS));
+            userProgress = { completed: {}, starred: {}, notes: {} };
+            saveState();
+            closeResetModal();
+            renderApp();
+            showToast("All syllabus progress has been reset.");
+        }
+
+        function copySummaryToClipboard() {
+            let total = 0;
+            let done = 0;
+            let lines = ["📚 DSA Syllabus Progress Report:"];
+
+            syllabusData.forEach(u => {
+                let uTotal = 0;
+                let uDone = 0;
+                u.sections.forEach(s => s.topics.forEach(t => {
+                    uTotal++;
+                    total++;
+                    if (userProgress.completed[t.id]) {
+                        uDone++;
+                        done++;
+                    }
+                }));
+                const pct = uTotal > 0 ? Math.round((uDone / uTotal) * 100) : 0;
+                lines.push(`• ${u.unitNumber} (${u.title}): ${uDone}/${uTotal} (${pct}%)`);
+            });
+
+            const totalPct = total > 0 ? Math.round((done / total) * 100) : 0;
+            lines.unshift(`✅ Overall Mastery: ${done}/${total} Topics (${totalPct}%)\n`);
+
+            const textArea = document.createElement("textarea");
+            textArea.value = lines.join('\n');
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+            showToast("Progress summary copied to clipboard!");
+        }
+
+        // ==========================================
+        // POMODORO STUDY TIMER
+        // ==========================================
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent = 
+                `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function toggleTimer() {
+            const icon = document.getElementById('timerIcon');
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                icon.setAttribute('data-lucide', 'play');
+            } else {
+                timerRunning = true;
+                icon.setAttribute('data-lucide', 'pause');
+                timerInterval = setInterval(() => {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerDisplay();
+                    } else {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        timerSeconds = 25 * 60;
+                        updateTimerDisplay();
+                        icon.setAttribute('data-lucide', 'play');
+                        lucide.createIcons();
+                        showToast("🎉 25m Pomodoro Focus Session Complete! Take a 5m break.");
+                    }
+                }, 1000);
+            }
+            lucide.createIcons();
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerSeconds = 25 * 60;
+            updateTimerDisplay();
+            const icon = document.getElementById('timerIcon');
+            icon.setAttribute('data-lucide', 'play');
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // UTILITIES & THEME
+        // ==========================================
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            toast.classList.add('flex');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                toast.classList.remove('flex');
+            }, 2800);
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/[&<>"']/g, function(m) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                })[m];
+            });
+        }
+
+        // Initialize on Window Load
+        window.onload = function() {
+            loadState();
+            renderApp();
+        };
+    </script>
+</body>
+</html>
+```
